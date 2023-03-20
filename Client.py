@@ -10,10 +10,14 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     print('Enter message to send...\n')
     s.connect((HOST, PORT))
     while True:
+
+        # Send data from the 'client'
         input_str = input('>')
         input_bin = input_str.encode('utf-8')
         s.sendall(input_bin)
         if '/q' in input_str: break
+
+        # Receive data and check for quitting it
         data = s.recv(4096)
         new_message = data.decode('utf-8')
         if '/q' in new_message: break

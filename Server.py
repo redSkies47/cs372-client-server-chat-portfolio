@@ -5,7 +5,7 @@ PORT = 50007              # Arbitrary non-privileged port
 
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Allows reusing ports
     s.bind((HOST, PORT))
     s.listen(1)
     print('\nServer listening on:', str(HOST), 'on port:', str(PORT))
@@ -14,10 +14,14 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         print('Connected by', addr)
         print('Waiting for message...\n')
         while True:
+
+            # Receive data and check for quitting it
             data = conn.recv(4096)
             data_str = data.decode('utf-8')
             if data_str: print(data_str)
             if '/q' in data_str: break
+
+            # Send data from the 'server'
             input_str = input('>')
             input_bin = input_str.encode('utf-8')
             conn.sendall(input_bin)
